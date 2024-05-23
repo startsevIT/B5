@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Статистика</title>
+</head>
+<body>
+    <header>
+        <a href="getrequests.html">Заявки</a>
+        <a href="createrequest.html">Создание заявки</a>
+        <a href="updaterequest.html">Обновление заявки</a>
+        <a href="statistics.html">Статистика</a>
+    </header>
+
+    <h3>Количество выполненных заявок:</h3>
+    <div id="completeCount"></div>
+
+    <h3>Среднее время выполнения:</h3>
+    <div id="averageTime"></div>
+    
+    <h3>Статистика неисправностей:</h3>
+    <table id="table"></table>
+    <script>
+        var table = document.getElementById("table");
+        var completeCount = document.getElementById("completeCount");
+        var averageTime = document.getElementById("averageTime");
+
+        CreateInfo();
+        async function CreateInfo()
+        {
+            var response = await fetch("https://localhost:7049/statistics", {method:"GET"});
+            var statistics = await response.json();
+
+            completeCount.append(statistics.completeCount + " заявок");
+            averageTime.append(statistics.averageTime + " часов");
+
+            var args = ["тип неисправности", "количество"];
+            table.append(Tr(args));
+            var dictionary = statistics.stat;
+            for(var param in dictionary)
+            {
+                var statArgs = [param, dictionary[param]]
+                table.append(Tr(statArgs));
+            }
+        }
+        function Tr(array)
+        {
+            var tr = document.createElement("tr");
+            array.forEach(e => tr.append(Td(e)));
+            return tr;
+        }
+        function Td(text)
+        {
+            var td = document.createElement("td");
+            td.append(text);
+            return td;
+        }
+    </script>
+    <style>
+        td { border: solid 1px black; }
+    </style>
+</body>
+</html>

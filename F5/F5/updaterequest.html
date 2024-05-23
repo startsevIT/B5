@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обновление заявки</title>
+</head>
+<body>
+    <header>
+        <a href="getrequests.html">Заявки</a>
+        <a href="createrequest.html">Создание заявки</a>
+        <a href="updaterequest.html">Обновление заявки</a>
+        <a href="statistics.html">Статистика</a>
+    </header>
+    <form>
+        <input id="id" type="text" placeholder="Номер заявки">
+        <input id="master" type="text" placeholder="Мастер">
+        <input id="problemDescription" type="text" placeholder="Описание проблемы">
+        <select id="requestStatus">
+            <option value="готова к выдаче">готова к выдаче</option>
+            <option value="в процессе ремонта">в процессе ремонта</option>
+            <option value="ожидание запчастей">ожидание запчастей</option>
+        </select>
+        <input id="comment" type="text" placeholder="Комментарий">
+        <input id="repairParts" type="text" placeholder="Необходимые запчасти">
+        <input id="send" type="button" value="Обновление" onclick="UpdateRequest()">
+    </form>
+    <script>
+        async function UpdateRequest()
+        {
+            var id = document.getElementById("id").value; 
+            var master = document.getElementById("master").value; 
+            var problemDescription = document.getElementById("problemDescription").value; 
+            var requestStatus = document.getElementById("requestStatus").value; 
+            var comment = document.getElementById("comment").value;
+            var repairParts = document.getElementById("repairParts").value;
+
+            var body = JSON.stringify({
+                master:master,
+                problemDescription:problemDescription,
+                requestStatus:requestStatus,
+                comment: comment,
+                repairParts:repairParts
+            });
+
+            await fetch(`https://localhost:7049/requests/${id}`,{
+                method:"PUT",
+                headers: {"Content-Type" : "application/json"},
+                body: body
+            })
+        }
+    </script>
+</body>
+</html>

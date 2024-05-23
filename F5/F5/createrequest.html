@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление заявки</title>
+</head>
+<body>
+    <header>
+        <a href="getrequests.html">Заявки</a>
+        <a href="createrequest.html">Создание заявки</a>
+        <a href="updaterequest.html">Обновление заявки</a>
+        <a href="statistics.html">Статистика</a>
+    </header>
+    <form>
+        <input id="id" type="text" placeholder="Номер заявки">
+        <input id="startDate" type="text" placeholder="YYYY-MM-DD">
+        <input id="orgTechType" type="text" placeholder="Тип проблемы">
+        <input id="orgTechModel" type="text" placeholder="Модель оборудования">
+        <input id="problemDescription" type="text" placeholder="Описание">
+        <input id="clientFIO" type="text" placeholder="ФИО Клиента">
+        <input id="clientNumber" type="text" placeholder="номер телефона клиента">
+        <select id="requestStatus">
+            <option value="новая заявка">новая заявка</option>
+            <option value="в процессе ремонта">в процессе ремонта</option>
+            <option value="завершена">завершена</option>
+        </select>
+        <input id="send" type="button" value="Создание" onclick="SendOrder()">
+    </form>
+    <script>      
+        async function SendOrder()
+        {
+            var id = document.getElementById("id").value; 
+            var startDate = document.getElementById("startDate").value; 
+            var orgTechType = document.getElementById("orgTechType").value;
+            var orgTechModel = document.getElementById("orgTechModel").value; 
+            var problemDescription = document.getElementById("problemDescription").value; 
+            var clientFIO = document.getElementById("clientFIO").value; 
+            var clientNumber = document.getElementById("clientNumber").value; 
+            var requestStatus = document.getElementById("requestStatus").value; 
+
+            var body = JSON.stringify({
+                id : id,
+                startDate : startDate,
+                orgTechType:orgTechType,
+                orgTechModel:orgTechModel,
+                problemDescription:problemDescription,
+                clientFIO:clientFIO,
+                clientNumber:clientNumber,
+                requestStatus:requestStatus
+            });
+
+            await fetch("https://localhost:7049/requests",{
+                method:"POST",
+                headers: {"Content-Type" : "application/json"},
+                body: body
+            })
+        }
+    </script>
+</body>
+</html>
+
